@@ -8,4 +8,4 @@ from app import app
 
 @app.route('/') # noqa
 def home():
-    return jsonify({'status': 'ok'})
+    return jsonify({'status': 'ok'});
