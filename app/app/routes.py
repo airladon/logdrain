@@ -6,6 +6,6 @@ from app import app
 # from werkzeug.urls import url_parse
 
 
-@app.route('/') # noqa
+@app.route('/')
 def home():
     return jsonify({'status': 'ok'})

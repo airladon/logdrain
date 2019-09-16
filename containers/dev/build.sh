@@ -127,13 +127,8 @@ then
     echo
     echo "${bold}${cyan}==== Checking ${reset}${cyan}$APP_NAME${bold} Heroku Config Variables Exist =====${reset} "
 
-    EXPECTED_CONFIG_VARS[0]=MAIL_SERVER
-    EXPECTED_CONFIG_VARS[1]=SECRET_KEY
-    EXPECTED_CONFIG_VARS[2]=MAIL_USERNAME
-    EXPECTED_CONFIG_VARS[3]=MAIL_SENDER
-    EXPECTED_CONFIG_VARS[4]=AES_KEY
-    EXPECTED_CONFIG_VARS[5]=PEPPER
-    EXPECTED_CONFIG_VARS[6]=DATABASE_URL
+    # EXPECTED_CONFIG_VARS[0]=MAIL_SERVER
+    # EXPECTED_CONFIG_VARS[1]=SECRET_KEY
 
     HEROKU_CONFIG_VARS=`heroku config --app=$APP_NAME | sed '1d' | sed 's/:.*$//' | tr " " "\n"`
 
