@@ -2,12 +2,22 @@
 
 Heroku logdrain
 
+# Quickstart
 ## Setup
 * Install Docker
 * `git clone https://github.com/airladon/itiget/`
 * Navigate to project directory (all following steps are done from the project directory unless otherwise said)
 
-## Install local Python and Node packages
+## Build and deploy to Heroku
+```
+export HEROKU_API_KEY=
+./start_env.sh dev
+./build.sh deploy APP-NAME
+```
+
+# Local Development Setup
+
+## Install local Python packages
 Local packages for python and node can be used by editors for lint and type hints, as well as allows flask database management.
 
 In addition, python is required for some scripts in the `tools` folder.
@@ -37,3 +47,4 @@ python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 ```
+

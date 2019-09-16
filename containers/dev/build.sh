@@ -23,8 +23,9 @@ normal="\\033[2m"
 MODE=prod
 DEPLOY=no_deploy
 TESTS=run
-HEROKU_APP_NAME=thisiget-log            # Production app name on Heroku
-HEROKU_DEV_APP_NAME=thisiget-log-dev    # For developer testing
+HEROKU_APP_NAME=prod_app_name_here        # Production app name on Heroku
+HEROKU_DEV_APP_NAME=dev_app_name_here    # For developer testing
+HEROKU_TEST_APP_NAME=test_app_name_here  # For CI testing
 APP_NAME="$HEROKU_DEV_APP_NAME"
 FAIL=0
 
@@ -67,8 +68,7 @@ then
   case "$2" in
     dev) APP_NAME=$HEROKU_DEV_APP_NAME;;
     test) APP_NAME=$HEROKU_TEST_APP_NAME;;
-    beta) APP_NAME=$HEROKU_BETA_APP_NAME;;
-    thisiget) APP_NAME=$HEROKU_APP_NAME;;
+    prod) APP_NAME=$HEROKU_APP_NAME;;
     skip-tests) TESTS="skip";;
     skip-build) BUILD="skip";;
     *) APP_NAME="$2";;
