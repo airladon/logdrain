@@ -1,0 +1,39 @@
+# Development environment for itgeti:
+#   - Python/JS Linting
+#   - Python/JS Testing
+#   - JS Building
+#   - Flask debugging
+
+FROM airladon/pynode:python3.7.3-node12.1.0-npm6.9.0-docker-heroku
+
+# ## General ##
+WORKDIR /opt/app
+
+# Install npm packages
+ADD package.json .
+ADD package-lock.json .
+RUN npm install
+
+# Install Python packages
+ADD requirements.txt .
+RUN pip install --no-cache-dir -q -r requirements.txt
+
+# This is the folder that will be shared with the docker host machine
+# RUN mkdir app
+# RUN mkdir tests
+# RUN mkdir src
+
+# Update path so eslint can be run from anywhere
+ENV PATH="/opt/app/node_modules/.bin:${PATH}"
+
+
+# Environment variable for flask
+ENV FLASK_APP app/my_app.py
+ENV FLASK_DEBUG 1
+
+RUN npm install figureone@0.0.93
+
+# Use this is you want to load straight into flask
+# CMD ["flask", "run", "--host=0.0.0.0"]
+
+ENTRYPOINT ["bash"]

@@ -1,0 +1,122 @@
+# Setup colors and text formatting
+red=`tput setaf 1`
+green=`tput setaf 2`
+cyan=`tput setaf 6`
+yellow=`tput setaf 3`
+bold=`tput bold`
+reset=`tput sgr0`
+
+# Default values of variables
+DOCKERFILE='Dockerfile_prod'
+HOST_PORT=5000
+CMD=''
+PROJECT_PATH=`pwd`
+FAIL=0
+
+stop_dev_server() {
+  SERVER_RUNNING=`docker ps --format {{.Names}} \
+                | grep devenv-dev-server`
+  if [ $SERVER_RUNNING ];
+    then
+    echo Dev server container is running - stopping...
+    docker stop devenv-dev-server
+  fi
+}
+
+# Check environment variables
+# $1: Deploy variable - can be "deploy" or "no_deploy"
+# $2: ENV name
+check_env_exists() {
+  if [ -z ${!1} ];
+  then
+    echo "${bold}${yellow}Warning: $1 environment variable not set. $2${reset}"
+  fi
+}
+
+# Check current build status and exit if in failure state
+check_status() {
+  if [ $FAIL != 0 ];
+    then
+    echo "${bold}${red}Build failed at${bold}${cyan}" $1 "${reset}"
+    exit 1    
+  fi
+}
+
+# if [ $1 != pupp ];
+# then
+#   echo
+#   echo "${bold}${cyan}============ Checking Environment Variables ============${reset}"
+#   check_env_exists MAIL_SERVER "Emails will not be sent by app."
+#   check_env_exists MAIL_USERNAME "Emails will not be sent by app."
+#   check_env_exists MAIL_PASSWORD "Emails will not be sent by app."
+#   check_env_exists MAIL_SENDER "Emails will not be sent by app."
+#   check_env_exists DATABASE_URL "Database will default to local SQLite3."
+#   check_status "Checking environment variables"
+#   echo "Environment variable checking complete"
+# fi
+
+
+if [ $1 ];
+then
+  DOCKERFILE=Dockerfile_$1
+fi
+
+if [ $1 = "prod" ];
+then
+  HOST_PORT=5000
+  CONTAINER_PORT=4000
+  stop_dev_server
+fi
+
+if [ $1 = "dev" ];
+then
+  HOST_PORT=5002
+  CONTAINER_PORT=5000
+fi
+
+if [ $1 = 'dev-server' ];
+then
+  HOST_PORT=5003
+  CONTAINER_PORT=5000
+  DOCKERFILE="Dockerfile_dev"
+  CMD=/opt/app/dev-server.sh
+fi
+
+if [ $1 = 'deploy_pipeline' ];
+then
+  HOST_PORT=5002
+  CONTAINER_PORT=5000
+  CMD="/opt/app/deploy_pipeline.sh"
+  DOCKERFILE="Dockerfile_dev"
+fi
+
+echo
+echo "${bold}${cyan}================= Starting container ===================${reset}"
+if [ $1 = 'prod' ];
+then
+  docker run -it --rm \
+    --name devenv-$1 \
+    -p $HOST_PORT:$CONTAINER_PORT \
+    --env PORT=$CONTAINER_PORT \
+    --env-file=$PROJECT_PATH/containers/env.txt \
+    devenv-$1
+else
+  # docker volume create browser-tests
+  # docker run 
+  docker run -it --rm \
+    -v $PROJECT_PATH/containers:/opt/app/containers \
+    -v $PROJECT_PATH/.git:/opt/app/.git \
+    -v $PROJECT_PATH/containers/dev/build.sh:/opt/app/build.sh \
+    -v $PROJECT_PATH/containers/dev/deploy_pipeline.sh:/opt/app/deploy_pipeline.sh \
+    -v $PROJECT_PATH/containers/dev/dev-server.sh:/opt/app/dev-server.sh \
+    -v $PROJECT_PATH/containers/dev/pytest.ini:/opt/app/pytest.ini \
+    -v $PROJECT_PATH/tests:/opt/app/tests \
+    -v $PROJECT_PATH/app:/opt/app/app \
+    -v $PROJECT_PATH/.flake8:/opt/app/.flake8 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    --env-file=$PROJECT_PATH/containers/env.txt \
+    -e HOST_PATH=$PROJECT_PATH \
+    --name devenv-$1 \
+    -p $HOST_PORT:$CONTAINER_PORT \
+    devenv-$1 $CMD
+fi
