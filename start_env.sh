@@ -15,11 +15,11 @@ FAIL=0
 
 stop_dev_server() {
   SERVER_RUNNING=`docker ps --format {{.Names}} \
-                | grep devenv-dev-server`
+                | grep logdrain-dev-server`
   if [ $SERVER_RUNNING ];
     then
     echo Dev server container is running - stopping...
-    docker stop devenv-dev-server
+    docker stop logdrain-dev-server
   fi
 }
 
@@ -42,18 +42,11 @@ check_status() {
   fi
 }
 
-# if [ $1 != pupp ];
-# then
-#   echo
-#   echo "${bold}${cyan}============ Checking Environment Variables ============${reset}"
-#   check_env_exists MAIL_SERVER "Emails will not be sent by app."
-#   check_env_exists MAIL_USERNAME "Emails will not be sent by app."
-#   check_env_exists MAIL_PASSWORD "Emails will not be sent by app."
-#   check_env_exists MAIL_SENDER "Emails will not be sent by app."
-#   check_env_exists DATABASE_URL "Database will default to local SQLite3."
-#   check_status "Checking environment variables"
-#   echo "Environment variable checking complete"
-# fi
+echo
+echo "${bold}${cyan}============ Checking Environment Variables ============${reset}"
+# check_env_exists MAIL_SERVER "Emails will not be sent by app."
+# check_status "Checking environment variables"
+# echo "Environment variable checking complete"
 
 
 if [ $1 ];
@@ -91,15 +84,23 @@ then
 fi
 
 echo
+echo "${bold}${cyan}================= Building container ===================${reset}"
+cp containers/$DOCKERFILE Dockerfile
+
+GUNICORN_PORT=4000
+docker build -t logdrain-$1 .
+rm Dockerfile
+
+echo
 echo "${bold}${cyan}================= Starting container ===================${reset}"
 if [ $1 = 'prod' ];
 then
   docker run -it --rm \
-    --name devenv-$1 \
+    --name logdrain-$1 \
     -p $HOST_PORT:$CONTAINER_PORT \
     --env PORT=$CONTAINER_PORT \
     --env-file=$PROJECT_PATH/containers/env.txt \
-    devenv-$1
+    logdrain-$1
 else
   # docker volume create browser-tests
   # docker run 
@@ -116,7 +117,7 @@ else
     -v /var/run/docker.sock:/var/run/docker.sock \
     --env-file=$PROJECT_PATH/containers/env.txt \
     -e HOST_PATH=$PROJECT_PATH \
-    --name devenv-$1 \
+    --name logdrain-$1 \
     -p $HOST_PORT:$CONTAINER_PORT \
-    devenv-$1 $CMD
+    logdrain-$1 $CMD
 fi
