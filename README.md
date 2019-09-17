@@ -11,7 +11,7 @@ Heroku logdrain
 ## Build and deploy to Heroku
 
 ```
-export HEROKU_API_KEY=
+export HEROKU_API_KEY=`heroku auth:token`
 ./start_env.sh dev
 ./build.sh deploy APP-NAME
 ```
@@ -35,6 +35,37 @@ Enter dev, test, prod addresses in `addresses.yml`
 ```
 
 ## Hooking up to CI
+
+### In Local
+Generate a secret key to use in HEROKU (use a different one for each HEROKU repo)
+```
+python tools/generate_secret_key.py
+```
+
+### In Heroku
+
+App->Settings->Reveal Config Vars
+
+Add SECRET_KEY and its value from above
+
+### In Travis
+Activate repository on Travis
+
+Add in the heroku addresses of the test and prod apps - e.g. `https://some-app.herokuapp.com`
+
+Pull Requests->Settings->Add Environment Variables
+  
+  * HEROKU_TEST_ADDRESS
+  * HEROKU_PROD_ADDRESS
+
+### In Github
+Github->REPOSITORY_NAME->Settings->Branches->Add Rule
+
+* master
+* Require status checks to pass before merging
+* Require branches to be up to date before merging
+* Include administrators
+
 
 
 # Local Development Setup
