@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from app import app
+from app import app, auth
 import re
 import os
 import boto3
@@ -27,8 +27,8 @@ def write_file(area, file_path, file_name):
 
 
 @app.route('/')
+@auth.login_required
 def home():
-    write_file('dev', '/opt/app', 'deploy_pipeline.sh')
     return jsonify({'status': 'ok'})
 
 
@@ -41,19 +41,31 @@ def write_to_space(path):
     write_file(path, '/opt/app', file_name)
 
 
+@auth.verify_password
+def verify_password(username, password):
+    if username != os.environ.get('LOG_USERNAME'):
+        return False
+    if password != os.environ.get('LOG_PASSWORD'):
+        return False
+    return True
+
+
 @app.route('/dev', methods=['GET', 'POST'])
+@auth.login_required
 def log_dev():
     write_to_space('dev')
     return ''
 
 
 @app.route('/test', methods=['GET', 'POST'])
+@auth.login_required
 def log_test():
     write_to_space('dev')
     return ''
 
 
 @app.route('/log', methods=['GET', 'POST'])
+@auth.login_required
 def log_prod():
     write_to_space('dev')
     return ''

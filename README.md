@@ -33,9 +33,9 @@ unset LOG_STORAGE_SECRET_ACCESS_KEY
 ```
 
 Test posts with:
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' $LOG_DEV_ADDRESS/dev
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@$LOG_DEV_ADDRESS/dev
 
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://localhost:5003/dev
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@localhost:5003/dev
 
 
 ## Setup Heroku
