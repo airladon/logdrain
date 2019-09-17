@@ -43,6 +43,11 @@ curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2
 curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@localhost:5003/dev
 
 
+To add a log drain:
+
+heroku drains:add https://$LOG_USERNAME:$LOG_PASSWORD@$LOG_APP_NAME.herokuapp.com/dev -a thisiget-dev
+
+
 ## Setup Heroku
 Generate a secret key to use in HEROKU (use a different one for each HEROKU repo)
 ```
