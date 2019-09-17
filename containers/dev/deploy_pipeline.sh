@@ -44,30 +44,32 @@ title "Run lint and local tests"
 check_status
 
 ###########################################################################
-title "Deploy to test site"
+title "Deploy to test server"
 ./build.sh deploy test skip-tests skip-build
 check_status
 
-title "Delay for test site to restart"
+title "Delay for test server to restart"
 sleep 5s
 check_status
 
 # Run Deploy Tests here
-title "Run tests on test site"
-pytest tests/test
+title "Run tests on test server"
+pytest tests/remote/test tests/remote/common --server test
 check_status
 
 ###########################################################################
 CURRENT_VERSION=`heroku releases -a "$HEROKU_PROD_APP_NAME" | sed -n '1p' | sed 's/^.*: //'`
-title "Deploy to prod site - current: $CURRENT_VERSION"
+title "Deploy to prod server - current: $CURRENT_VERSION"
 ./build.sh deploy prod skip-tests skip-build
 check_status
 
-title "Delay for prod site to restart"
+title "Delay for prod server to restart"
 sleep 5s
 check_status
 
 # # Run Prod Tests here and Rollback if fail
+title "Run tests on prod server"
+pytest tests/remote/prod tests/remote/common --server prod
 if [ $? != 0 ];
 then
     heroku rollback $CURRENT_VERSION

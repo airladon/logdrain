@@ -17,17 +17,17 @@ dev_address = os.environ.get('HEROKU_DEV_ADDRESS') or \
 
 
 def pytest_addoption(parser):
-    parser.addoption("--address", action="store", default="dev")
+    parser.addoption("--server", action="store", default="dev")
 
 
 def pytest_generate_tests(metafunc):
     # This is called for every test. Only get/set command line arguments
     # if the argument is specified in the list of test "fixturenames".
-    address_value = metafunc.config.option.address
+    server_value = metafunc.config.option.server
     if 'address' in metafunc.fixturenames:
-        if address_value == 'prod':
+        if server_value == 'prod':
             metafunc.parametrize("address", [prod_address])
-        if address_value == 'test':
+        if server_value == 'test':
             metafunc.parametrize("address", [test_address])
-        if address_value == 'dev':
+        if server_value == 'dev':
             metafunc.parametrize("address", [dev_address])
