@@ -32,6 +32,11 @@ unset LOG_STORAGE_ACCESS_KEY
 unset LOG_STORAGE_SECRET_ACCESS_KEY
 ```
 
+If doing tests flask, make sure to set:
+```
+export LOCAL_PRODUCTION=DISABLE_SECURITY
+```
+
 Test posts with:
 curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@$LOG_DEV_ADDRESS/dev
 

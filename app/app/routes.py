@@ -43,6 +43,9 @@ def write_to_space(path):
 
 @auth.verify_password
 def verify_password(username, password):
+    if os.environ.get('LOCAL_PRODUCTION') and \
+       os.environ.get('LOCAL_PRODUCTION') == 'DISABLE_SECURITY':
+        return True
     if username != os.environ.get('LOG_USERNAME'):
         return False
     if password != os.environ.get('LOG_PASSWORD'):
