@@ -3,7 +3,7 @@
 #   - Python Testing
 #   - Flask debugging
 
-FROM airladon/pynode:python3.7.3-node12.1.0-npm6.9.0-docker-heroku
+FROM python:3.7.3-slim
 
 # ## General ##
 WORKDIR /opt/app
