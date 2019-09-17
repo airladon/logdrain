@@ -9,6 +9,10 @@ bold=`tput bold`
 reset=`tput sgr0`
 
 PROJECT_PATH=`pwd`
+
+address_to_app() {
+  echo "$1" | sed 's/dev: //' | sed 's/http[^\/]*\/\///' | sed 's/\.herokuapp.com.*//'
+}
 HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 's/prod: //'`)
 if [ $HEROKU_PROD_ADDRESS ];
 then
@@ -59,6 +63,7 @@ check_status
 
 ###########################################################################
 CURRENT_VERSION=`heroku releases -a "$HEROKU_PROD_APP_NAME" | sed -n '1p' | sed 's/^.*: //'`
+
 title "Deploy to prod server - current: $CURRENT_VERSION"
 ./build.sh deploy prod skip-tests skip-build
 check_status
@@ -67,7 +72,7 @@ title "Delay for prod server to restart"
 sleep 5s
 check_status
 
-# # Run Prod Tests here and Rollback if fail
+# Run Prod Tests here and Rollback if fail
 title "Run tests on prod server"
 pytest tests/remote/prod tests/remote/common --server prod
 if [ $? != 0 ];
@@ -75,12 +80,13 @@ then
     heroku rollback $CURRENT_VERSION
     NEW_VERSION=`heroku releases -a "$HEROKU_PROD_APP_NAME" | sed -n '1p' | sed 's/^.*: //'`
     echo "${red}${bold}Production deployment failed${reset}"
+    title "Rolling back to previous version"
     if [ "$NEW_VERSION" = "$CURRENT_VERSION" ];
     then
-        echo "${red}${bold}Rolled back to $CURRENT_VERSION${reset}"
+        echo "${green}${bold}OK - Rolled back to $CURRENT_VERSION${reset}"
         echo
     else
-        echo "${red}${bold}Rollback to $CURRENT_VERSION failed${reset}"
+        echo "${red}${bold}FAIL - Rollback to $CURRENT_VERSION failed${reset}"
         echo
     fi
     exit 1
