@@ -61,6 +61,7 @@ Add Environment Variables:
 
   * HEROKU_TEST_ADDRESS
   * HEROKU_PROD_ADDRESS
+  * HEROKU_API_KEY
 
 
 
