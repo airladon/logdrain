@@ -9,6 +9,11 @@ bold=`tput bold`
 reset=`tput sgr0`
 
 PROJECT_PATH=`pwd`
+HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 's/prod: //'`)
+if [ $HEROKU_PROD_ADDRESS ];
+then
+  HEROKU_PROD_APP_NAME=$(address_to_app $HEROKU_PROD_ADDRESS)
+fi
 
 check_status() {
   if [ $? != 0 ];
@@ -39,26 +44,26 @@ title "Run Lint and Local Tests"
 check_status
 
 ###########################################################################
-title "Deploy to thisiget-log-test"
+title "Deploy to test site"
 ./build.sh deploy test skip-tests skip-build
 check_status
 
-title "Delay for thisiget-test to restart"
+title "Delay for test site to restart"
 sleep 5s
 check_status
 
 # Run Deploy Tests here
-title "Test thisiget-log-test"
+title "Run tests on test site"
 pytest tests/test
 check_status
 
 ###########################################################################
-CURRENT_VERSION=`heroku releases -a thisiget | sed -n '1p' | sed 's/^.*: //'`
-title "Deploy to thisiget - current: $CURRENT_VERSION"
-./build.sh deploy thisiget-log skip-tests skip-build
+CURRENT_VERSION=`heroku releases -a "$HEROKU_PROD_APP_NAME" | sed -n '1p' | sed 's/^.*: //'`
+title "Deploy to prod site - current: $CURRENT_VERSION"
+./build.sh deploy prod skip-tests skip-build
 check_status
 
-title "Delay for thisiget to restart"
+title "Delay for prod site to restart"
 sleep 5s
 check_status
 
@@ -66,7 +71,7 @@ check_status
 if [ $? != 0 ];
 then
     heroku rollback $CURRENT_VERSION
-    NEW_VERSION=`heroku releases -a thisiget | sed -n '1p' | sed 's/^.*: //'`
+    NEW_VERSION=`heroku releases -a "$HEROKU_PROD_APP_NAME" | sed -n '1p' | sed 's/^.*: //'`
     echo "${red}${bold}Production deployment failed${reset}"
     if [ "$NEW_VERSION" = "$CURRENT_VERSION" ];
     then
