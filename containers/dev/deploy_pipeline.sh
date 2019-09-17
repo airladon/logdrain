@@ -34,12 +34,12 @@ python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); 
 
 
 ###########################################################################
-title "Run Lint and Local Tests"
+title "Run lint and local tests"
 ./build.sh prod
 check_status
 
 ###########################################################################
-title "Deploy to thisiget-log-test"
+title "Deploy to test site"
 ./build.sh deploy test skip-tests skip-build
 check_status
 
@@ -48,17 +48,17 @@ sleep 5s
 check_status
 
 # Run Deploy Tests here
-title "Test thisiget-log-test"
+title "Run tests on test deployment"
 pytest tests/test
 check_status
 
 ###########################################################################
 CURRENT_VERSION=`heroku releases -a thisiget | sed -n '1p' | sed 's/^.*: //'`
-title "Deploy to thisiget - current: $CURRENT_VERSION"
-./build.sh deploy thisiget-log skip-tests skip-build
+title "Deploy to prod side - current: $CURRENT_VERSION"
+./build.sh deploy prod skip-tests skip-build
 check_status
 
-title "Delay for thisiget to restart"
+title "Delay for prod site to restart"
 sleep 5s
 check_status
 
