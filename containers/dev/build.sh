@@ -37,19 +37,19 @@ HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 
 # Environment variables can also be set to define the HEROKU_PROD_APP_NAME,
 # HEROKU_DEV_APP_NAME and HEROKU_TEST_APP_NAME, and will override the
 # app.yml file
-if [ $HEROKU_PROD_ADDRESS ];
+if [ $LOG_PROD_ADDRESS ];
 then
-  HEROKU_PROD_APP_NAME=$(address_to_app $HEROKU_PROD_ADDRESS)
+  HEROKU_PROD_APP_NAME=$(address_to_app $LOG_PROD_ADDRESS)
 fi
 
-if [ $HEROKU_DEV_ADDRESS ];
+if [ $LOG_DEV_ADDRESS ];
 then
-  HEROKU_DEV_APP_NAME=$(address_to_app $HEROKU_DEV_ADDRESS)
+  HEROKU_DEV_APP_NAME=$(address_to_app $LOG_DEV_ADDRESS)
 fi
 
-if [ $HEROKU_TEST_ADDRESS ];
+if [ $LOG_TEST_ADDRESS ];
 then
-  HEROKU_TEST_APP_NAME=$(address_to_app $HEROKU_TEST_ADDRESS)
+  HEROKU_TEST_APP_NAME=$(address_to_app $LOG_TEST_ADDRESS)
 fi
 
 # By default we will deploy to DEV APP

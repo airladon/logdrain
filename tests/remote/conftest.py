@@ -8,11 +8,11 @@ addresses = {}
 with open(yml_file, 'r') as f:
     addresses = safe_load(f)
 
-test_address = os.environ.get('HEROKU_TEST_ADDRESS') or \
+test_address = os.environ.get('LOG_TEST_ADDRESS') or \
     addresses['test']
-prod_address = os.environ.get('HEROKU_PROD_ADDRESS') or \
+prod_address = os.environ.get('LOG_PROD_ADDRESS') or \
     addresses['prod']
-dev_address = os.environ.get('HEROKU_DEV_ADDRESS') or \
+dev_address = os.environ.get('LOG_DEV_ADDRESS') or \
     addresses['dev']
 
 

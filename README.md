@@ -10,6 +10,28 @@ Heroku logdrain
 
 All following steps are done from the project directory in the console unless otherwise said.
 
+Setup environment variables:
+```
+export HEROKU_API_KEY=
+export LOG_DEV_ADDRESS=
+export LOG_TEST_ADDRESS=
+export LOG_PROD_ADDRESS=
+export LOG_STORAGE_ADDRESS=
+export LOG_STORAGE_ACCESS_KEY=
+export LOG_STORAGE_SECRET_ACCESS_KEY=
+```
+
+Later, if you want to clear the variables use:
+```
+unset HEROKU_API_KEY
+unset LOG_DEV_ADDRESS
+unset LOG_TEST_ADDRESS
+unset LOG_PROD_ADDRESS
+unset LOG_STORAGE_ADDRESS
+unset LOG_STORAGE_ACCESS_KEY
+unset LOG_STORAGE_SECRET_ACCESS_KEY
+```
+
 ## Setup Heroku
 Generate a secret key to use in HEROKU (use a different one for each HEROKU repo)
 ```
@@ -44,9 +66,9 @@ Follow Setup Local and Setup Heroku from above.
 
 Setup environment variables in `./containers/dev/addresses.yml` or manually:
 ```
-export HEROKU_DEV_ADDRESS=
-export HEROKU_TEST_ADDRESS=
-export HEROKU_PROD_ADDRESS=
+export LOG_DEV_ADDRESS=
+export LOG_TEST_ADDRESS=
+export LOG_PROD_ADDRESS=
 ```
 
 Test endpoints locally:
@@ -102,8 +124,8 @@ Check only "Build pushed pull requests"
 
 Add Environment Variables:
 
-  * HEROKU_TEST_ADDRESS
-  * HEROKU_PROD_ADDRESS
+  * LOG_TEST_ADDRESS
+  * LOG_PROD_ADDRESS
   * HEROKU_API_KEY
 
 
