@@ -39,7 +39,7 @@ python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); 
 
 
 ###########################################################################
-title "Run Lint and Local Tests"
+title "Run lint and local tests"
 ./build.sh prod
 check_status
 
