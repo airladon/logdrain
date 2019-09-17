@@ -1,14 +1,10 @@
 from flask import jsonify, request
-# from flask import render_template, flash, redirect, url_for, jsonify, session
-# from flask import make_response, request
 from app import app
 import re
 import os
 import boto3
-import json
 from datetime import datetime
 from datetime import timezone
-# from werkzeug.urls import url_parse
 
 
 def write_file(area, file_path, file_name):
@@ -36,15 +32,28 @@ def home():
     return jsonify({'status': 'ok'})
 
 
-@app.route('/dev', methods=['GET', 'POST'])
-def log_dev():
+def write_to_space(path):
     now = datetime.now(timezone.utc)
     dt_string = now.strftime("%Y.%m.%d-%H.%M.%S.%f")
     file_name = f'{dt_string}.txt'
     with open(file_name, 'w') as f:
         f.write(request.data.decode('utf-8'))
-    output = ''
-    with open(file_name, 'r') as f:
-        output = f.read()
-        print(output)
-    return output
+    write_file(path, '/opt/app', file_name)
+
+
+@app.route('/dev', methods=['GET', 'POST'])
+def log_dev():
+    write_to_space('dev')
+    return ''
+
+
+@app.route('/test', methods=['GET', 'POST'])
+def log_test():
+    write_to_space('dev')
+    return ''
+
+
+@app.route('/log', methods=['GET', 'POST'])
+def log_prod():
+    write_to_space('dev')
+    return ''
