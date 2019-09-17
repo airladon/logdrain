@@ -53,10 +53,16 @@ Activate repository on Travis
 
 Add in the heroku addresses of the test and prod apps - e.g. `https://some-app.herokuapp.com`
 
-Pull Requests->Settings->Add Environment Variables
-  
+Pull Requests->Settings
+
+Check only "Build pushed pull requests"
+
+Add Environment Variables:
+
   * HEROKU_TEST_ADDRESS
   * HEROKU_PROD_ADDRESS
+
+
 
 ### In Github
 Github->REPOSITORY_NAME->Settings->Branches->Add Rule
