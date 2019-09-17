@@ -32,6 +32,12 @@ unset LOG_STORAGE_ACCESS_KEY
 unset LOG_STORAGE_SECRET_ACCESS_KEY
 ```
 
+Test posts with:
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' $LOG_DEV_ADDRESS/dev
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://localhost:5003/dev
+
+
 ## Setup Heroku
 Generate a secret key to use in HEROKU (use a different one for each HEROKU repo)
 ```
