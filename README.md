@@ -20,6 +20,13 @@ export HEROKU_API_KEY=
 
 Link Travis
 
+```
+export HEROKU_DEV_ADDRESS=
+export HEROKU_TEST_ADDRESS=
+export HEROKU_PROD_ADDRESS=
+```
+
+
 # Local Development Setup
 
 ## Install local Python packages

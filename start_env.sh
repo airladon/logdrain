@@ -116,6 +116,7 @@ else
     -v $PROJECT_PATH/containers/dev/build.sh:/opt/app/build.sh \
     -v $PROJECT_PATH/containers/dev/deploy_pipeline.sh:/opt/app/deploy_pipeline.sh \
     -v $PROJECT_PATH/containers/dev/dev-server.sh:/opt/app/dev-server.sh \
+    -v $PROJECT_PATH/containers/dev/addresses.yml:/opt/app/addresses.yml \
     -v $PROJECT_PATH/containers/dev/pytest.ini:/opt/app/pytest.ini \
     -v $PROJECT_PATH/tests:/opt/app/tests \
     -v $PROJECT_PATH/app:/opt/app/app \

@@ -25,27 +25,34 @@ normal="\\033[2m"
 MODE=prod
 DEPLOY=no_deploy
 TESTS=run
-HEROKU_APP_NAME=ENTER_PROD_NAME_HERE       # Production app name on Heroku
-HEROKU_DEV_APP_NAME=ENTER_DEV_NAME_HERE    # For developer testing
-HEROKU_TEST_APP_NAME=ENTER_TEST_NAME_HERE  # For CI testing
 
-# Environment variables can also be set to define the HEROKU_APP_NAME,
-# HEROKU_DEV_APP_NAME and HEROKU_TEST_APP_NAME
-if [ $HEROKU_APP_NAME_OVERRIDE ];
+address_to_app() {
+  echo "$1" | sed 's/dev: //' | sed 's/http[^\/]*\/\///' | sed 's/\.herokuapp.com.*//'
+}
+
+HEROKU_DEV_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^dev: | sed 's/dev: //'`)
+HEROKU_TEST_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^test: | sed 's/test: //'`)
+HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 's/prod: //'`)
+
+# Environment variables can also be set to define the HEROKU_PROD_APP_NAME,
+# HEROKU_DEV_APP_NAME and HEROKU_TEST_APP_NAME, and will override the
+# app.yml file
+if [ $HEROKU_PROD_ADDRESS ];
 then
-  HEROKU_APP_NAME=$HEROKU_APP_NAME_OVERRIDE
+  HEROKU_PROD_APP_NAME=$(address_to_app $HEROKU_PROD_ADDRESS)
 fi
 
-if [ $HEROKU_DEV_APP_NAME_OVERRIDE ];
+if [ $HEROKU_DEV_ADDRESS ];
 then
-  HEROKU_DEV_APP_NAME=$HEROKU_DEV_APP_NAME_OVERRIDE
+  HEROKU_DEV_APP_NAME=$(address_to_app $HEROKU_DEV_ADDRESS)
 fi
 
-if [ $HEROKU_TEST_APP_NAME_OVERRIDE ];
+if [ $HEROKU_TEST_ADDRESS ];
 then
-  HEROKU_TEST_APP_NAME=$HEROKU_TEST_APP_NAME_OVERRIDE
+  HEROKU_TEST_APP_NAME=$(address_to_app $HEROKU_TEST_ADDRESS)
 fi
 
+# By default we will deploy to DEV APP
 APP_NAME="$HEROKU_DEV_APP_NAME"
 FAIL=0
 
@@ -88,7 +95,7 @@ then
   case "$2" in
     dev) APP_NAME=$HEROKU_DEV_APP_NAME;;
     test) APP_NAME=$HEROKU_TEST_APP_NAME;;
-    prod) APP_NAME=$HEROKU_APP_NAME;;
+    prod) APP_NAME=$HEROKU_PROD_APP_NAME;;
     skip-tests) TESTS="skip";;
     skip-build) BUILD="skip";;
     *) APP_NAME="$2";;
