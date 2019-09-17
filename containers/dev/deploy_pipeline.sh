@@ -34,19 +34,12 @@ python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); 
 
 
 ###########################################################################
-title "Run Lint Checks, Tests and Build App"
+title "Run Lint and Local Tests"
 ./build.sh prod
 check_status
 
-title "Creating hashes"
-python ./create_site_hashes.py
-
-title "Creating site map"
-python ./create_site_map.py
-check_status
-
 ###########################################################################
-title "Deploy to thisiget-test"
+title "Deploy to thisiget-log-test"
 ./build.sh deploy test skip-tests skip-build
 check_status
 
@@ -54,54 +47,20 @@ title "Delay for thisiget-test to restart"
 sleep 5s
 check_status
 
-title "Ratings Test: thisiget-test"
-./ratings_test.sh test
-check_status
-
-title "Browser Tests: thisiget-test"
-JEST_OPTIONS=`python browser_test_diff_master.py`
-echo Testing: $JEST_OPTIONS
-if [ -z "$JEST_OPTIONS" ];
-then
-    echo No extended tests needed
-else
-    ./browser_test.sh test $JEST_OPTIONS
-    check_status
-fi
-
-###########################################################################
-title "Deploy to thisiget-beta"
-./build.sh deploy beta skip-tests skip-build
-check_status
-
-title "Delay for thisiget-beta to restart"
-sleep 5s
-check_status
-
-title "Ratings Test: thisiget-beta"
-./ratings_test.sh beta
-check_status
-
-title "Browser Tests: thisiget-beta"
-./browser_test.sh beta prod.btest.js
-check_status
+# # Run Deploy Tests here
+# check_status
 
 ###########################################################################
 CURRENT_VERSION=`heroku releases -a thisiget | sed -n '1p' | sed 's/^.*: //'`
 title "Deploy to thisiget - current: $CURRENT_VERSION"
-./build.sh deploy thisiget skip-tests skip-build
+./build.sh deploy thisiget-log skip-tests skip-build
 check_status
 
 title "Delay for thisiget to restart"
 sleep 5s
 check_status
 
-title "Ratings Test: thisiget"
-./ratings_test.sh prod
-check_status
-
-title "Browser Tests: thisiget"
-./browser_test.sh prod prod.btest.js
+# # Run Prod Tests here and Rollback if fail
 if [ $? != 0 ];
 then
     heroku rollback $CURRENT_VERSION

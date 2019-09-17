@@ -3,8 +3,10 @@
 # build.sh                           Test and build dev version
 # build.sh dev                       Test and build dev version
 # build.sh prod                      Test and build prod version
-# build.sh deploy                    Deploy prod build to thisiget-log
-# build.sh deploy dev                Deploy prod build to thisiget-log-dev
+# build.sh deploy                    Deploy prod build to prod app
+# build.sh deploy test               Deploy prod build to test app
+# build.sh deploy dev                Deploy prod build to dev app
+# build.sh deploy APP-NAME           Deploy prod build to APP-NAME
 
 # build.sh dev skip-tests         Test and build dev version skipping tests
 # build.sh stage skip-tests       Test and build stage version skipping tests
@@ -23,9 +25,9 @@ normal="\\033[2m"
 MODE=prod
 DEPLOY=no_deploy
 TESTS=run
-HEROKU_APP_NAME=prod_app_name_here        # Production app name on Heroku
-HEROKU_DEV_APP_NAME=dev_app_name_here    # For developer testing
-HEROKU_TEST_APP_NAME=test_app_name_here  # For CI testing
+HEROKU_APP_NAME=ENTER_PROD_NAME_HERE       # Production app name on Heroku
+HEROKU_DEV_APP_NAME=ENTER_DEV_NAME_HERE    # For developer testing
+HEROKU_TEST_APP_NAME=ENTER_TEST_NAME_HERE  # For CI testing
 APP_NAME="$HEROKU_DEV_APP_NAME"
 FAIL=0
 

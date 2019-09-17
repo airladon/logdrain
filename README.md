@@ -9,6 +9,7 @@ Heroku logdrain
 * Navigate to project directory (all following steps are done from the project directory unless otherwise said)
 
 ## Build and deploy to Heroku
+
 ```
 export HEROKU_API_KEY=
 ./start_env.sh dev
@@ -47,4 +48,46 @@ python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 ```
+
+## Run dev container
+```
+./start_env.sh dev
+```
+From here, can run pytest, flake8, or flask (flask run --host=0.0.0.0)
+
+
+## Run dev-server container
+```
+./start_env.sh dev-server
+```
+
+Use a web browser and go to: `http://localhost:5003`
+
+
+## Run stage container
+
+The stage container runs like production, but runs flask instead of gunicorn so you can see the stage messages.
+
+To access it locally, you need to disable Flask Talisman which forces all communication to https:
+```
+export LOCAL_PRODUCTION=DISABLE_SECURITY
+./start_env.sh stage
+```
+
+Use a web browser and go to: `http://localhost:5001`
+
+
+## Run Prod container
+
+The stage container runs like production, running gunicorn.
+
+To access it locally, you need to disable Flask Talisman which forces all communication to https:
+```
+export LOCAL_PRODUCTION=DISABLE_SECURITY
+./start_env.sh prod
+```
+
+Use a web browser and go to: `http://localhost:5000`
+
+NOTE: Do not use HTTPS as it will not work!
 
