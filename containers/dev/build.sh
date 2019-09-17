@@ -190,7 +190,7 @@ then
   run_cmd "Python linting" "flake8"
   echo
   echo "${bold}${cyan}===================== Testing ======================${reset}"
-  run_cmd "Python Testing" "pytest"
+  run_cmd "Python Testing" "pytest tests/local"
   echo
 fi
 

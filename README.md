@@ -16,6 +16,10 @@ export HEROKU_API_KEY=
 ./build.sh deploy APP-NAME
 ```
 
+## CI
+
+Link Travis
+
 # Local Development Setup
 
 ## Install local Python packages

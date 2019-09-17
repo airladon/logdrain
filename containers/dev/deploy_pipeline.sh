@@ -47,8 +47,10 @@ title "Delay for thisiget-test to restart"
 sleep 5s
 check_status
 
-# # Run Deploy Tests here
-# check_status
+# Run Deploy Tests here
+title "Test thisiget-log-test"
+pytest tests/test
+check_status
 
 ###########################################################################
 CURRENT_VERSION=`heroku releases -a thisiget | sed -n '1p' | sed 's/^.*: //'`
