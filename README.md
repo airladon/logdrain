@@ -16,15 +16,25 @@ export HEROKU_API_KEY=
 ./build.sh deploy APP-NAME
 ```
 
-## CI
-
-Link Travis
+## Using Environment Variables
 
 ```
 export HEROKU_DEV_ADDRESS=
 export HEROKU_TEST_ADDRESS=
 export HEROKU_PROD_ADDRESS=
+./start_env.sh dev
+./build.sh deploy prod
 ```
+
+## Using `addresses.yml`
+
+Enter dev, test, prod addresses in `addresses.yml`
+```
+./start_env.sh dev
+./build.sh deploy prod
+```
+
+## Hooking up to CI
 
 
 # Local Development Setup
