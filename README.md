@@ -3,50 +3,93 @@
 Heroku logdrain
 
 # Quickstart
-## Setup
+
+## Setup Local
 * Install Docker
 * `git clone https://github.com/airladon/itiget/`
-* Navigate to project directory (all following steps are done from the project directory unless otherwise said)
 
-## Build and deploy to Heroku
+All following steps are done from the project directory in the console unless otherwise said.
 
-```
-export HEROKU_API_KEY=`heroku auth:token`
-./start_env.sh dev
-./build.sh deploy APP-NAME
-```
-
-## Using Environment Variables
-
-```
-export HEROKU_DEV_ADDRESS=
-export HEROKU_TEST_ADDRESS=
-export HEROKU_PROD_ADDRESS=
-./start_env.sh dev
-./build.sh deploy prod
-```
-
-## Using `addresses.yml`
-
-Enter dev, test, prod addresses in `addresses.yml`
-```
-./start_env.sh dev
-./build.sh deploy prod
-```
-
-## Hooking up to CI
-
-### In Local
+## Setup Heroku
 Generate a secret key to use in HEROKU (use a different one for each HEROKU repo)
 ```
 python tools/generate_secret_key.py
 ```
 
-### In Heroku
+Then, in the heroku web interface:
+* Create App
+* App->Settings->Reveal Config Vars
+* Add SECRET_KEY and its value from above
 
-App->Settings->Reveal Config Vars
+If you wish to do development and testing on different apps to the production app, then create three apps, and generate a different SECRET_KEY for each:
+* APP_NAME-dev
+* APP_NAME-test
+* APP_NAME-prod
 
-Add SECRET_KEY and its value from above
+
+## Build and deploy to Heroku
+
+If you want to build the app and deploy directly to the app APP_NAME on Heroku:
+
+```
+export HEROKU_API_KEY=`heroku auth:token`
+./start_env.sh dev
+./build.sh deploy APP_NAME
+```
+
+# Full Setup
+Follow Setup Local and Setup Heroku from above.
+
+## Manually deploy with testing:
+
+Setup environment variables in `./containers/dev/addresses.yml` or manually:
+```
+export HEROKU_DEV_ADDRESS=
+export HEROKU_TEST_ADDRESS=
+export HEROKU_PROD_ADDRESS=
+```
+
+Test endpoints locally:
+```
+./start_env.sh dev
+pytest tests/local
+```
+
+Deploy to dev site for experimentation and manual testing:
+```
+./start_env.sh dev
+pytest tests/local
+./build.sh deploy dev
+```
+
+Deploy to test site and run automated tests
+```
+./start_env.sh dev
+./build.sh deploy test
+pytest tests/remote/test tests/remote/common --server test
+```
+
+Deploy to prod site and run automated tests
+```
+./start_env.sh dev
+./build.sh deploy prod
+pytest tests/remote/test tests/remote/common --server prod
+```
+
+OR
+
+After the manual testing, deploy the app automatically through the `deploy_pipeline.sh` script. This will deploy to the test site, do the tests, and then deploy to the prod site and do the tests
+
+```
+./start_env.sh dev
+./deploy_pipeline.sh
+```
+
+## Using Travis to auto deploy
+If you clone this repository and use it in another git repository, then you can set up travis to test and deploy the endpoint. The setup below makes it so the `master` branch is protected and can only be updated with a pull request from another branch. Whenever the pull request into `master` is created, Travis will run the `deploy_pipeline.sh` script which will:
+* Run lint and automated tests
+* Deploy to test server and perform tests
+* Deploy to production server and run tests
 
 ### In Travis
 Activate repository on Travis
@@ -62,7 +105,6 @@ Add Environment Variables:
   * HEROKU_TEST_ADDRESS
   * HEROKU_PROD_ADDRESS
   * HEROKU_API_KEY
-
 
 
 ### In Github
