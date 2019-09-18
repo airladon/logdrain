@@ -1,0 +1,1 @@
+python ./tools/get_log.py $1 $2

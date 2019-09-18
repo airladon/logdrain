@@ -75,6 +75,10 @@ This will post 1001 '=' characters to the dev logging app. If the MAX_LOG_SIZE i
 ```
 ./post dev 10001
 ./get_log.sh dev latest
+./get_log.sh dev list
+./get_log.sh latest
+./get_log.sh list
+./get_log.sh FILE_NAME
 ```
 
 #### Hook it up to a HEROKU app as a drain
