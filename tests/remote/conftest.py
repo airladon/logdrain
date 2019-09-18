@@ -1,19 +1,9 @@
 import pytest  # noqa
-from pathlib import Path
-from yaml import safe_load
 import os
 
-yml_file = (Path().absolute() / 'addresses.yml').absolute().as_posix()
-addresses = {}
-with open(yml_file, 'r') as f:
-    addresses = safe_load(f)
-
-test_address = os.environ.get('LOG_TEST_ADDRESS') or \
-    addresses['test']
-prod_address = os.environ.get('LOG_PROD_ADDRESS') or \
-    addresses['prod']
-dev_address = os.environ.get('LOG_DEV_ADDRESS') or \
-    addresses['dev']
+test_address = os.environ.get('LOG_APP_TEST_ADDRESS')
+prod_address = os.environ.get('LOG_APP_PROD_ADDRESS')
+dev_address = os.environ.get('LOG_APP_DEV_ADDRESS')
 
 
 def pytest_addoption(parser):

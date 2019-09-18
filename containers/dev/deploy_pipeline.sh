@@ -10,13 +10,10 @@ reset=`tput sgr0`
 
 PROJECT_PATH=`pwd`
 
-address_to_app() {
-  echo "$1" | sed 's/dev: //' | sed 's/http[^\/]*\/\///' | sed 's/\.herokuapp.com.*//'
-}
-HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 's/prod: //'`)
-if [ $LOG_PROD_ADDRESS ];
+HEROKU_PROD_APP_NAME=''
+if [ $LOG_APP_PROD_NAME ];
 then
-  HEROKU_PROD_APP_NAME=$(address_to_app $LOG_PROD_ADDRESS)
+  HEROKU_PROD_APP_NAME=$LOG_APP_PROD_NAME
 fi
 
 check_status() {

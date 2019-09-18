@@ -116,9 +116,10 @@ else
     -v $PROJECT_PATH/containers/dev/build.sh:/opt/app/build.sh \
     -v $PROJECT_PATH/containers/dev/deploy_pipeline.sh:/opt/app/deploy_pipeline.sh \
     -v $PROJECT_PATH/containers/dev/dev-server.sh:/opt/app/dev-server.sh \
-    -v $PROJECT_PATH/containers/dev/addresses.yml:/opt/app/addresses.yml \
     -v $PROJECT_PATH/containers/dev/pytest.ini:/opt/app/pytest.ini \
     -v $PROJECT_PATH/tests:/opt/app/tests \
+    -v $PROJECT_PATH/tools:/opt/app/tools \
+    -v $PROJECT_PATH/local_storage:/opt/app/local_storage \
     -v $PROJECT_PATH/app:/opt/app/app \
     -v $PROJECT_PATH/.flake8:/opt/app/.flake8 \
     -v /var/run/docker.sock:/var/run/docker.sock \

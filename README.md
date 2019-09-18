@@ -13,39 +13,69 @@ All following steps are done from the project directory in the console unless ot
 Setup environment variables:
 ```
 export HEROKU_API_KEY=
-export LOG_DEV_ADDRESS=
-export LOG_TEST_ADDRESS=
-export LOG_PROD_ADDRESS=
+export LOG_APP_DEV_ADDRESS=
+export LOG_APP_DEV_NAME=
+export LOG_APP_TEST_ADDRESS=
+export LOG_APP_TEST_NAME=
+export LOG_APP_PROD_ADDRESS=
+export LOG_APP_PROD_NAME=
 export LOG_STORAGE_ADDRESS=
 export LOG_STORAGE_ACCESS_KEY=
 export LOG_STORAGE_SECRET_ACCESS_KEY=
+export LOG_APP_USERNAME=
+export LOG_APP_PASSWORD=
+export LOG_AES_KEY=
 ```
 
 Later, if you want to clear the variables use:
 ```
 unset HEROKU_API_KEY
-unset LOG_DEV_ADDRESS
-unset LOG_TEST_ADDRESS
-unset LOG_PROD_ADDRESS
+unset LOG_APP_DEV_ADDRESS
+unset LOG_APP_DEV_NAME
+unset LOG_APP_TEST_ADDRESS
+unset LOG_APP_TEST_NAME
+unset LOG_APP_PROD_ADDRESS
+unset LOG_APP_PROD_NAME
 unset LOG_STORAGE_ADDRESS
 unset LOG_STORAGE_ACCESS_KEY
 unset LOG_STORAGE_SECRET_ACCESS_KEY
+unset LOG_APP_USERNAME
+unset LOG_APP_PASSWORD
+unset LOG_AES_KEY
 ```
 
-If doing tests flask, make sure to set:
+If doing tests flask, or doing a local build/deploy (which will run the flask tests) make sure to set:
 ```
 export LOCAL_PRODUCTION=DISABLE_SECURITY
 ```
 
-Test posts with:
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@$LOG_DEV_ADDRESS/dev
+### Create and manually test a local logging app
+```
+unset LOG_STORAGE_ADDRESS
+export MAX_LOG_SIZE=100
+./start_env.sh dev-server
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@host.docker.internal:5003/dev
+python tools/decrypt.py local_storage/FILE_NAME
+```
 
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_USERNAME:$LOG_PASSWORD@localhost:5003/dev
+### Build and manually test a dev logging app
+```
+./start_env.sh
+./build.sh deploy dev
+curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@$LOG_APP_DEV_ADDRESS/dev
+```
 
+To add/remove the DEV logging app to be a log drain of a heroku app with name HEROKU_APP_NAME:
+```
+./drain.sh add HEROKU_APP_NAME dev
+./drain.sh remove HEROKU_APP_NAME dev
+```
 
-To add a log drain:
-
-heroku drains:add https://$LOG_USERNAME:$LOG_PASSWORD@$LOG_APP_NAME.herokuapp.com/dev -a thisiget-dev
+To add/remove the DEV logging app to be a log drain of a heroku app with name HEROKU_APP_NAME:
+```
+./drain.sh add HEROKU_APP_NAME prod
+./drain.sh remove HEROKU_APP_NAME prod
+```
 
 
 ## Setup Heroku
@@ -82,9 +112,9 @@ Follow Setup Local and Setup Heroku from above.
 
 Setup environment variables in `./containers/dev/addresses.yml` or manually:
 ```
-export LOG_DEV_ADDRESS=
-export LOG_TEST_ADDRESS=
-export LOG_PROD_ADDRESS=
+export LOG_APP_DEV_ADDRESS=
+export LOG_APP_TEST_ADDRESS=
+export LOG_APP_PROD_ADDRESS=
 ```
 
 Test endpoints locally:
@@ -140,8 +170,8 @@ Check only "Build pushed pull requests"
 
 Add Environment Variables:
 
-  * LOG_TEST_ADDRESS
-  * LOG_PROD_ADDRESS
+  * LOG_APP_TEST_ADDRESS
+  * LOG_APP_PROD_ADDRESS
   * HEROKU_API_KEY
 
 

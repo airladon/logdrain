@@ -16,6 +16,7 @@ RUN pip install --no-cache-dir -q -r requirements.txt
 
 
 RUN mkdir app
+RUN mkdir local_storage
 ADD containers/prod/Procfile .
 ADD containers/prod/runtime.txt .
 ADD containers/prod/wsgi.py .

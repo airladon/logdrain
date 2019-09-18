@@ -30,26 +30,26 @@ address_to_app() {
   echo "$1" | sed 's/dev: //' | sed 's/http[^\/]*\/\///' | sed 's/\.herokuapp.com.*//'
 }
 
-HEROKU_DEV_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^dev: | sed 's/dev: //'`)
-HEROKU_TEST_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^test: | sed 's/test: //'`)
-HEROKU_PROD_APP_NAME=$(address_to_app `cat addresses.yml | grep -e ^prod: | sed 's/prod: //'`)
+HEROKU_DEV_APP_NAME=''
+HEROKU_TEST_APP_NAME=''
+HEROKU_PROD_APP_NAME=''
 
 # Environment variables can also be set to define the HEROKU_PROD_APP_NAME,
 # HEROKU_DEV_APP_NAME and HEROKU_TEST_APP_NAME, and will override the
 # app.yml file
-if [ $LOG_PROD_ADDRESS ];
+if [ $LOG_APP_DEV_NAME ];
 then
-  HEROKU_PROD_APP_NAME=$(address_to_app $LOG_PROD_ADDRESS)
+  HEROKU_PROD_APP_NAME=$LOG_APP_DEV_NAME
 fi
 
-if [ $LOG_DEV_ADDRESS ];
+if [ $LOG_APP_TEST_NAME ];
 then
-  HEROKU_DEV_APP_NAME=$(address_to_app $LOG_DEV_ADDRESS)
+  HEROKU_DEV_APP_NAME=$LOG_APP_TEST_NAME
 fi
 
-if [ $LOG_TEST_ADDRESS ];
+if [ $LOG_APP_PROD_NAME ];
 then
-  HEROKU_TEST_APP_NAME=$(address_to_app $LOG_TEST_ADDRESS)
+  HEROKU_TEST_APP_NAME=$LOG_APP_PROD_NAME
 fi
 
 # By default we will deploy to DEV APP

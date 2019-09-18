@@ -7,6 +7,7 @@ import os
 def test_root(address):
     r = json.loads(requests.get(
         f'{address}/',
-        auth=(os.environ.get('LOG_USERNAME'), os.environ.get('LOG_PASSWORD'))
+        auth=(os.environ.get('LOG_APP_USERNAME'),
+              os.environ.get('LOG_APP_PASSWORD'))
     ).content)
     assert r['status'] == 'ok'

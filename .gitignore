@@ -3,3 +3,4 @@ Dockerfile
 .pytest_cache/
 __pycache__
 env/
+local_storage/*
