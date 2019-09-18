@@ -114,6 +114,7 @@ else
     -v $PROJECT_PATH/containers:/opt/app/containers \
     -v $PROJECT_PATH/.git:/opt/app/.git \
     -v $PROJECT_PATH/containers/dev/build.sh:/opt/app/build.sh \
+    -v $PROJECT_PATH/post.sh:/opt/app/post.sh \
     -v $PROJECT_PATH/containers/dev/deploy_pipeline.sh:/opt/app/deploy_pipeline.sh \
     -v $PROJECT_PATH/containers/dev/dev-server.sh:/opt/app/dev-server.sh \
     -v $PROJECT_PATH/containers/dev/pytest.ini:/opt/app/pytest.ini \

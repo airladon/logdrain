@@ -10,7 +10,7 @@ from shutil import copyfile
 
 log_file = '/opt/app/local_storage/log.txt'
 encrypted_log_file = '/opt/app/local_storage/encrypted_log.txt'
-max_log_size = os.environ.get('MAX_LOG_SIZE') or 50000
+max_log_size = os.environ.get('MAX_LOG_SIZE') or 1000000
 
 
 def hex_str_to_bytes(hex_str_to_convert):
@@ -66,6 +66,7 @@ def decrypt(encrypted_str_or_file, key=get_aes_key_bytes(), padding_char=' '):
     if os.path.isfile(encrypted_str_or_file):
         with open(encrypted_str_or_file, 'r') as f:
             encrypted_str = f.read()
+
     # Convert key to bytes type if not already
     key_bytes = key
     if type(key) == str:
@@ -79,11 +80,14 @@ def decrypt(encrypted_str_or_file, key=get_aes_key_bytes(), padding_char=' '):
     return plain_text.rstrip(padding_char)
 
 
-def upload_file(area, file_path, file_name):
+def upload_file(bucket, file_path, file_name):
     log_storage_address = os.environ.get('LOG_STORAGE_ADDRESS') or 'local'
 
     if log_storage_address == 'local':
-        copyfile(encrypted_log_file, f'./local_storage/{file_name}')
+        local_path = f'./local_storage/{bucket}'
+        if not os.path.isdir(local_path):
+            os.mkdir(local_path)
+        copyfile(encrypted_log_file, f'{local_path}/{file_name}')
         return
 
     region = re.search(
@@ -99,7 +103,7 @@ def upload_file(area, file_path, file_name):
         aws_access_key_id=log_storage_access_key,
         aws_secret_access_key=log_storage_secret,
     )
-    client.upload_file(encrypted_log_file, area, file_name)
+    client.upload_file(encrypted_log_file, bucket, file_name)
 
 
 def encrypt_file():
