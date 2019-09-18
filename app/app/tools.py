@@ -10,7 +10,7 @@ from shutil import copyfile
 
 log_file = '/opt/app/local_storage/log.txt'
 encrypted_log_file = '/opt/app/local_storage/encrypted_log.txt'
-max_log_size = os.environ.get('MAX_LOG_SIZE') or 1000000
+max_log_size = os.environ.get('MAX_LOG_SIZE') or 1000
 
 
 def hex_str_to_bytes(hex_str_to_convert):
@@ -125,8 +125,8 @@ def write_to_storage(path):
 def add_to_log(path, data):
     with open(log_file, 'a+') as f:
         f.write(data)
-    print(os.path.getsize(log_file), max_log_size)
-    if os.path.isfile(log_file) and os.path.getsize(log_file) > int(max_log_size):
+    if os.path.isfile(log_file) and \
+       os.path.getsize(log_file) > int(max_log_size):
         encrypt_file()
         os.remove(log_file)
         write_to_storage(path)

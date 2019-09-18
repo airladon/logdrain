@@ -11,3 +11,6 @@ def test_root(address):
               os.environ.get('LOG_APP_PASSWORD'))
     ).content)
     assert r['status'] == 'ok'
+
+
+# Test to make sure endpoing is user/pass protected

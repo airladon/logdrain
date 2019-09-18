@@ -6,7 +6,7 @@
 
 LOG_APP_ENDPOINT=''
 case "$1" in
-  local) LOG_APP_ENDPOINT=host.docker.internal:5003/dev;;
+  local) LOG_APP_ENDPOINT=http://host.docker.internal:5003/dev;;
   dev) LOG_APP_ENDPOINT=$LOG_APP_DEV_ADDRESS/dev;;
   test) LOG_APP_ENDPOINT=$LOG_APP_TEST_ADDRESS/test;;
   prod) LOG_APP_ENDPOINT=$LOG_APP_PROD_ADDRESS/prod;;
@@ -25,4 +25,9 @@ else
   done
 fi
 
-curl -i -X POST -H 'Content-Type: application/json' -d "$CHARS" http://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@$LOG_APP_ENDPOINT
+PROTOCOL=`echo $LOG_APP_ENDPOINT | sed 's/:\/\/.*//'`
+ADDRESS=`echo $LOG_APP_ENDPOINT | sed 's/^[^:]*:\/\///'`
+
+# echo $PROTOCOL://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@$ADDRESS
+# exit 1
+curl -i -X POST -H 'Content-Type: application/json' -d "$CHARS" $PROTOCOL://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@$ADDRESS

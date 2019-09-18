@@ -49,27 +49,42 @@ If doing tests flask, or doing a local build/deploy (which will run the flask te
 export LOCAL_PRODUCTION=DISABLE_SECURITY
 ```
 
-### Create and manually test a local logging app
+### Create LOCAL logging app
+In one console window create the local logging server:
 ```
 unset LOG_STORAGE_ADDRESS
 export MAX_LOG_SIZE=100
 ./start_env.sh dev-server
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@host.docker.internal:5003/dev
-python tools/decrypt.py local_storage/FILE_NAME
 ```
 
-### Build and manually test a dev logging app
+In a different console window POST a string of 101 '=' characters to the server. As the max log size is set to 100, this should trigger an upload of the encrypted log to the local storage.
+```
+./post.sh local 101
+python tools/decrypt.py local_storage/dev/FILE_NAME
+```
+
+### Build DEV logging app
+
 ```
 ./start_env.sh
 ./build.sh deploy dev
-curl -i -X POST -H 'Content-Type: application/json' -d '{"key1": "value1", "key2": "value2"}' http://$LOG_APP_USERNAME:$LOG_APP_PASSWORD@$LOG_APP_DEV_ADDRESS/dev
 ```
+
+#### Manual Testing
+This will post 1001 '=' characters to the dev logging app. If the MAX_LOG_SIZE is 1000 on the dev logging app, then this should trigger an upload of the encrypted log to the remote log storage. This can then be accessed.
+```
+./post dev 10001
+./get_log.sh dev latest
+```
+
+#### Hook it up to a HEROKU app as a drain
 
 To add/remove the DEV logging app to be a log drain of a heroku app with name HEROKU_APP_NAME:
 ```
 ./drain.sh add HEROKU_APP_NAME dev
 ./drain.sh remove HEROKU_APP_NAME dev
 ```
+
 
 To add/remove the DEV logging app to be a log drain of a heroku app with name HEROKU_APP_NAME:
 ```
