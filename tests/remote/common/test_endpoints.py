@@ -1,18 +1,13 @@
-import json
 import requests
 import pytest  # noqa: F401
-import os
-from shutil import rmtree
-
-# def test_root(address, auth):
-#     r = json.loads(requests.get(f'{address}/', auth=auth).content)
-#     assert r['status'] == 'ok'
 
 
-
-def test_requires_authentication(address):
+def test_requires_authentication(address, authentication):
     r = requests.get(f'{address}/')
     assert r.status_code == 401
+
+    r = requests.get(f'{address}/', auth=authentication)
+    assert r.status_code == 200
 
 
 def test_root(get):
@@ -23,5 +18,3 @@ def test_root(get):
 def test_post(post):
     r = post('/dev', 'abcd')
     assert r.status_code == 200
-
-# Test to make sure endpoint is user/pass protected

@@ -53,6 +53,7 @@ def pytest_generate_tests(metafunc):
     if 'post' in metafunc.fixturenames:
         metafunc.parametrize("post", [post_request[server_value]])
 
+    # Clean the local storage directory
     path = './local_storage/dev'
     log_file = './local_storage/log.txt'
     if os.path.isdir(path):
@@ -72,8 +73,7 @@ def pytest_generate_tests(metafunc):
 #         os.remove(log_file)
 
 
-
-# @pytest.fixture
-# def auth():
-#     return (
-#         os.environ.get('LOG_APP_USERNAME'), os.environ.get('LOG_APP_PASSWORD'))
+@pytest.fixture
+def authentication():
+    return (
+        os.environ.get('LOG_APP_USERNAME'), os.environ.get('LOG_APP_PASSWORD'))
