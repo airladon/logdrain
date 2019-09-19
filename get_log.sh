@@ -1,1 +1,1 @@
-python ./tools/get_log.py $1 $2
+python ./tools/get_logs.py $1 $2

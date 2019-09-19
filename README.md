@@ -74,11 +74,12 @@ python tools/decrypt.py local_storage/dev/FILE_NAME
 This will post 1001 '=' characters to the dev logging app. If the MAX_LOG_SIZE is 1000 on the dev logging app, then this should trigger an upload of the encrypted log to the remote log storage. This can then be accessed.
 ```
 ./post dev 10001
-./get_log.sh dev latest
-./get_log.sh dev list
-./get_log.sh latest
-./get_log.sh list
-./get_log.sh FILE_NAME
+./get_logs.sh dev latest
+./get_logs.sh dev list
+./get_logs.sh latest
+./get_logs.sh list
+./get_logs.sh FILE_NAME
+./get_logs.sh dev/
 ```
 
 #### Hook it up to a HEROKU app as a drain

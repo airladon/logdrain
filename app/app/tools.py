@@ -5,6 +5,7 @@ import re
 import boto3
 from datetime import datetime, timezone
 from Crypto.Random import get_random_bytes
+from pathlib import Path
 import binascii
 from shutil import copyfile
 
@@ -85,6 +86,8 @@ def upload_file(bucket, file_path, file_name):
 
     if log_storage_address == 'local':
         local_path = f'./local_storage/{bucket}'
+        path = Path(f'./local_storage/{bucket}/{file_name}')
+        path.parent.mkdir(parents=True, exist_ok=True)
         if not os.path.isdir(local_path):
             os.mkdir(local_path)
         copyfile(encrypted_log_file, f'{local_path}/{file_name}')
@@ -118,7 +121,8 @@ def encrypt_file():
 def write_to_storage(path):
     now = datetime.now(timezone.utc)
     dt_string = now.strftime("%Y.%m.%d-%H.%M.%S.%f")
-    file_name = f'{dt_string}.txt'
+    path_str = now.strftime("%Y/%m/%d/%H")
+    file_name = f'{path_str}/{dt_string}.txt'
     upload_file(path, '/opt/app', file_name)
 
 
