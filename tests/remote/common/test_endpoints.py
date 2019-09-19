@@ -1,10 +1,13 @@
 import json
 import requests
 import pytest  # noqa: F401
+import os
+from shutil import rmtree
 
 # def test_root(address, auth):
 #     r = json.loads(requests.get(f'{address}/', auth=auth).content)
 #     assert r['status'] == 'ok'
+
 
 
 def test_requires_authentication(address):

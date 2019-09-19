@@ -2,6 +2,7 @@ import pytest  # noqa
 import os
 import json
 import requests
+from shutil import rmtree
 
 address = {
     'test': os.environ.get('LOG_APP_TEST_ADDRESS'),
@@ -51,6 +52,25 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize("get", [get_request[server_value]])
     if 'post' in metafunc.fixturenames:
         metafunc.parametrize("post", [post_request[server_value]])
+
+    path = './local_storage/dev'
+    log_file = './local_storage/log.txt'
+    if os.path.isdir(path):
+        rmtree(path)
+    os.mkdir(path)
+    if os.path.isfile(log_file):
+        os.remove(log_file)
+
+
+# def setup_function():
+#     path = './local_storage/dev'
+#     log_file = './local_storage/log.txt'
+#     if os.path.isdir(path):
+#         rmtree(path)
+#     os.mkdir(path)
+#     if os.path.isfile(log_file):
+#         os.remove(log_file)
+
 
 
 # @pytest.fixture
