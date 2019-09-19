@@ -27,24 +27,7 @@ export LOG_APP_PASSWORD=
 export LOG_AES_KEY=
 ```
 
-Later, if you want to clear the variables use:
-```
-unset HEROKU_API_KEY
-unset LOG_APP_DEV_ADDRESS
-unset LOG_APP_DEV_NAME
-unset LOG_APP_TEST_ADDRESS
-unset LOG_APP_TEST_NAME
-unset LOG_APP_PROD_ADDRESS
-unset LOG_APP_PROD_NAME
-unset LOG_STORAGE_ADDRESS
-unset LOG_STORAGE_ACCESS_KEY
-unset LOG_STORAGE_SECRET_ACCESS_KEY
-unset LOG_APP_USERNAME
-unset LOG_APP_PASSWORD
-unset LOG_AES_KEY
-```
-
-If doing tests flask, or doing a local build/deploy (which will run the flask tests) make sure to set:
+If doing flask tests, or doing a local build/deploy (which will run the flask tests) make sure to set:
 ```
 export LOCAL_PRODUCTION=DISABLE_SECURITY
 ```
@@ -203,6 +186,23 @@ Github->REPOSITORY_NAME->Settings->Branches->Add Rule
 * Require branches to be up to date before merging
 * Include administrators
 
+
+Later, if you want to clear the variables use:
+```
+unset HEROKU_API_KEY
+unset LOG_APP_DEV_ADDRESS
+unset LOG_APP_DEV_NAME
+unset LOG_APP_TEST_ADDRESS
+unset LOG_APP_TEST_NAME
+unset LOG_APP_PROD_ADDRESS
+unset LOG_APP_PROD_NAME
+unset LOG_STORAGE_ADDRESS
+unset LOG_STORAGE_ACCESS_KEY
+unset LOG_STORAGE_SECRET_ACCESS_KEY
+unset LOG_APP_USERNAME
+unset LOG_APP_PASSWORD
+unset LOG_AES_KEY
+```
 
 
 # Local Development Setup
