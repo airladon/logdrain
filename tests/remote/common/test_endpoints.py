@@ -12,9 +12,9 @@ def test_requires_authentication(address):
     assert r.status_code == 401
 
 
-# def test_root(get):
-#     r = get('/')
-#     assert r['status'] == 'ok'
+def test_root(get):
+    r = get('/')
+    assert r['status'] == 'ok'
 
 
 def test_post(post):
