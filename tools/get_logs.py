@@ -57,9 +57,8 @@ def get_file(file_name):
 
 
 def get_files(prefix):
-    prefix = prefix.strip('/')
-    files = client.list_objects(Bucket=bucket, Prefix=prefix)['Contents']
-    files = [file for file in files if file['Key'][-1] != '/']
+    all_files = client.list_objects(Bucket=bucket, Prefix=prefix)['Contents']
+    files = [file for file in all_files if file['Key'][-1] != '/']
     for file in files:
         print(file['Key'])
         path = Path(f'./local_storage/{file["Key"]}')
@@ -101,7 +100,7 @@ if get == 'list':
     exit()
 
 if get[-1] == '/':
-    get_files(prefix)
+    get_files(sys.argv[1])
     exit()
 
 remote_file_name, local_file_name = get_file(get)
