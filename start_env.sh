@@ -10,7 +10,16 @@ reset=`tput sgr0`
 DOCKERFILE='Dockerfile_prod'
 HOST_PORT=5000
 CMD=''
-PROJECT_PATH=`pwd`
+
+### UPDATE HERE ####
+LOCAL_PROJECT_PATH=`pwd`
+if [ $HOST_PATH ];
+then
+  PROJECT_PATH=$HOST_PATH
+else
+  PROJECT_PATH=`pwd`
+fi
+### UPDATE END ####
 FAIL=0
 
 stop_dev_server() {
@@ -54,26 +63,26 @@ then
   DOCKERFILE=Dockerfile_$1
 fi
 
-if [ $1 = "prod" ];
+if [ "$1" = "prod" ];
 then
   HOST_PORT=5000
   CONTAINER_PORT=4000
   stop_dev_server
 fi
 
-if [ $1 = "stage" ];
+if [ "$1" = "stage" ];
 then
   HOST_PORT=5001
   CONTAINER_PORT=5000
 fi
 
-if [ $1 = "dev" ];
+if [ "$1" = "dev" ];
 then
-  HOST_PORT=5002
+  HOST_PORT=5032
   CONTAINER_PORT=5000
 fi
 
-if [ $1 = 'dev-server' ];
+if [ "$1" = 'dev-server' ];
 then
   HOST_PORT=5003
   CONTAINER_PORT=5000
@@ -81,9 +90,9 @@ then
   CMD=/opt/app/dev-server.sh
 fi
 
-if [ $1 = 'deploy_pipeline' ];
+if [ "$1" = 'deploy_pipeline' ];
 then
-  HOST_PORT=5002
+  HOST_PORT=5032
   CONTAINER_PORT=5000
   CMD="/opt/app/deploy_pipeline.sh"
   DOCKERFILE="Dockerfile_dev"
@@ -91,15 +100,14 @@ fi
 
 echo
 echo "${bold}${cyan}================= Building container ===================${reset}"
-cp containers/$DOCKERFILE Dockerfile
-
+echo docker build -t "logdrain-$1" .
 GUNICORN_PORT=4000
-docker build -t logdrain-$1 .
+docker build -t "logdrain-$1" .
 rm Dockerfile
 
 echo
 echo "${bold}${cyan}================= Starting container ===================${reset}"
-if [ $1 = 'prod' ];
+if [ "$1" = 'prod' ];
 then
   docker run -it --rm \
     --name logdrain-$1 \
@@ -110,22 +118,20 @@ then
 else
   # docker volume create browser-tests
   # docker run 
+  ### UPDATE --env-file to be local project path ####
+  echo $PROJECT_PATH/containers/dev/deploy_pipeline.sh
   docker run -it --rm \
     -v $PROJECT_PATH/containers:/opt/app/containers \
     -v $PROJECT_PATH/.git:/opt/app/.git \
     -v $PROJECT_PATH/containers/dev/build.sh:/opt/app/build.sh \
-    -v $PROJECT_PATH/post.sh:/opt/app/post.sh \
-    -v $PROJECT_PATH/get_logs.sh:/opt/app/get_logs.sh \
     -v $PROJECT_PATH/containers/dev/deploy_pipeline.sh:/opt/app/deploy_pipeline.sh \
     -v $PROJECT_PATH/containers/dev/dev-server.sh:/opt/app/dev-server.sh \
+    -v $PROJECT_PATH/containers/dev/addresses.yml:/opt/app/addresses.yml \
     -v $PROJECT_PATH/containers/dev/pytest.ini:/opt/app/pytest.ini \
     -v $PROJECT_PATH/tests:/opt/app/tests \
-    -v $PROJECT_PATH/tools:/opt/app/tools \
-    -v $PROJECT_PATH/local_storage:/opt/app/local_storage \
     -v $PROJECT_PATH/app:/opt/app/app \
     -v $PROJECT_PATH/.flake8:/opt/app/.flake8 \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    --env-file=$PROJECT_PATH/containers/env.txt \
+    --env-file=$LOCAL_PROJECT_PATH/containers/env.txt \
     -e HOST_PATH=$PROJECT_PATH \
     --name logdrain-$1 \
     -p $HOST_PORT:$CONTAINER_PORT \

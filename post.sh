@@ -6,7 +6,7 @@
 
 LOG_APP_ENDPOINT=''
 case "$1" in
-  local) LOG_APP_ENDPOINT=http://host.docker.internal:5003/dev;;
+  local) LOG_APP_ENDPOINT=http://host.docker.internal:5013/dev;;
   dev) LOG_APP_ENDPOINT=$LOG_APP_DEV_ADDRESS/dev;;
   test) LOG_APP_ENDPOINT=$LOG_APP_TEST_ADDRESS/test;;
   prod) LOG_APP_ENDPOINT=$LOG_APP_PROD_ADDRESS/log;;

@@ -250,7 +250,7 @@ From here, can run pytest, flake8, or flask (flask run --host=0.0.0.0)
 ./start_env.sh dev-server
 ```
 
-Use a web browser and go to: `http://localhost:5003`
+Use a web browser and go to: `http://localhost:5013`
 
 
 ## Run stage container

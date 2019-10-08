@@ -8,7 +8,7 @@ address = {
     'test': os.environ.get('LOG_APP_TEST_ADDRESS'),
     'prod': os.environ.get('LOG_APP_PROD_ADDRESS'),
     'dev': os.environ.get('LOG_APP_DEV_ADDRESS'),
-    'local': 'http://host.docker.internal:5003',
+    'local': 'http://host.docker.internal:5013',
 }
 
 auth = (os.environ.get('LOG_APP_USERNAME'), os.environ.get('LOG_APP_PASSWORD'))
