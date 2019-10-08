@@ -120,7 +120,6 @@ else
   # docker volume create browser-tests
   # docker run 
   ### UPDATE --env-file to be local project path ####
-  echo $PROJECT_PATH/containers/dev/deploy_pipeline.sh
   docker run -it --rm \
     -v $PROJECT_PATH/containers:/opt/app/containers \
     -v $PROJECT_PATH/.git:/opt/app/.git \
