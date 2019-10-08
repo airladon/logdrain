@@ -102,7 +102,6 @@ echo
 echo "${bold}${cyan}================= Building container ===================${reset}"
 cp containers/$DOCKERFILE Dockerfile
 
-echo docker build -t "logdrain-$1" .
 GUNICORN_PORT=4000
 docker build -t "logdrain-$1" .
 rm Dockerfile
